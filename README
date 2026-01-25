@@ -1,0 +1,31 @@
+# TraceTech
+
+Hola a todos, me presento soy Eduardo Angulo Hidalgo y este es un proyecto personal que me ha parecido interesante.
+
+Sistema web de gestión de tickets de soporte con comunicación directa entre técnico y cliente mediante chat integrado.
+
+Proyecto desarrollado como aplicación full-stack con Spring Boot, enfocado en mejorar la cercanía y el seguimiento de incidencias técnicas.
+
+## 🚀 Funcionalidades
+
+- Registro e inicio de sesión de usuarios
+- Creación y seguimiento de tickets de soporte
+- Estados de ticket (abierto, en proceso, cerrado, etc.)
+- Historial de actividad por ticket
+- Chat integrado entre técnico y cliente
+- Protección de formularios mediante tokens CSRF
+- Persistencia de datos en base de datos H2 (entorno de desarrollo)
+
+## 🛠️ Tecnologías utilizadas
+
+- **Java 21**
+- **Spring Boot**
+- **Spring Security (CSRF, autenticación)**
+- **Base de datos H2**
+- **Maven**
+
+## ⚙️ Requisitos
+
+- Java 21
+- Maven 3.9+
+- Navegador web moderno
