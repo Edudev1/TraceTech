@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Tickets - TraceTech</title>
+</head>
+<body>
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div class="container">
+
+    <h1>Listado de tickets</h1>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Estado</th>
+                <th>Prioridad</th>
+                <th>Fecha de creación</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="t : ${tickets}">
+                <td th:text="${t.id}">1</td>
+                <td>
+                    <a th:href="@{/tickets/{id}(id=${t.id})}" th:text="${t.title}">Título</a>
+                </td>
+                <td th:text="${t.status}">OPEN</td>
+                <td th:text="${t.priority}">MEDIUM</td>
+                <td th:text="${#temporals.format(t.createdAt, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

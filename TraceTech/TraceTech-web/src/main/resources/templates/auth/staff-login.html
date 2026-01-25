@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Staff - TraceTech</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div class="container" style="display:flex; justify-content:center; align-items:center; min-height:70vh;">
+
+  <div class="card" style="max-width:420px; width:100%; text-align:center;">
+
+    <h2>Acceso Staff</h2>
+    <p class="muted">Solo administradores y técnicos</p>
+
+    <form th:action="@{/login}" method="post" style="margin-top:15px; text-align:left;">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+      <label>Usuario</label>
+      <input type="text" name="username" required>
+
+      <label>Contraseña</label>
+      <input type="password" name="password" required>
+
+      <button type="submit" style="width:100%; margin-top:10px;">Entrar</button>
+
+      <p th:if="${param.error}" class="error" style="margin-top:10px;">
+        Usuario o contraseña incorrectos
+      </p>
+    </form>
+
+    <hr style="margin:18px 0; border:none; border-top:1px solid #e2e8f0;">
+
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <a th:href="@{/login}">Login cliente</a>
+      <a th:href="@{/}">Volver al inicio</a>
+    </div>
+
+  </div>
+
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

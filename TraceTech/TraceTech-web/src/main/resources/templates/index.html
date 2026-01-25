@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TraceTech</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div class="container" style="display:flex; justify-content:center; align-items:center; min-height:70vh;">
+
+    <div class="card" style="text-align:center; max-width:600px; width:100%;">
+
+        <h1 style="font-size:2rem; margin-bottom:10px;">TraceTech</h1>
+        <p class="muted" style="margin-bottom:20px;">
+            Plataforma de gestión de incidencias para clientes y equipo técnico.
+        </p>
+
+        <!-- Usuario NO logueado -->
+        <div th:if="${#authorization.expression('isAnonymous()')}" style="display:flex; flex-direction:column; gap:12px;">
+
+            <a th:href="@{/login}">
+                <button style="width:100%;">Entrar como cliente</button>
+            </a>
+
+            <a th:href="@{/register}">
+                <button style="width:100%; background:linear-gradient(135deg,#16a34a,#15803d);">
+                    Crear cuenta
+                </button>
+            </a>
+
+            <div class="muted" style="margin-top:8px;">¿Eres parte del equipo?</div>
+
+            <a th:href="@{/staff/login}">
+                <button style="width:100%; background:linear-gradient(135deg,#475569,#334155);">
+                    Acceso staff
+                </button>
+            </a>
+        </div>
+
+        <!-- Usuario logueado -->
+        <div th:if="${#authorization.expression('isAuthenticated()')}" style="margin-top:10px;">
+
+            <p>Bienvenido, <strong th:text="${#authentication.name}">usuario</strong></p>
+
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:15px;">
+                <a th:href="@{/tickets}">
+                    <button>Ver tickets</button>
+                </a>
+
+                <a th:href="@{/tickets/new}">
+                    <button style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">
+                        Crear ticket
+                    </button>
+                </a>
+
+                <span th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}">
+                    <a th:href="@{/tickets/mine}">
+                        <button style="background:linear-gradient(135deg,#f59e0b,#d97706);">
+                            Mis asignados
+                        </button>
+                    </a>
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

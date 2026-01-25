@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Ticket #' + ${ticket.id} + ' - TraceTech'">Detalle Ticket</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div class="container">
+
+    <h1 th:text="'Ticket #' + ${ticket.id}">Ticket</h1>
+
+    <!-- CARD: Datos del ticket -->
+    <div class="card">
+        <p><strong>Título:</strong> <span th:text="${ticket.title}">Título</span></p>
+
+        <p>
+            <strong>Descripción:</strong><br>
+            <span th:text="${ticket.description}">Descripción</span>
+        </p>
+
+        <p><strong>Estado:</strong> <span th:text="${ticket.status}">OPEN</span></p>
+        <p><strong>Prioridad:</strong> <span th:text="${ticket.priority}">MEDIUM</span></p>
+
+        <p><strong>Creado por:</strong> <span th:text="${ticket.createdBy} ?: '-'">-</span></p>
+        <p><strong>Asignado a:</strong> <span th:text="${ticket.assignedTo} ?: '-'">-</span></p>
+
+        <p>
+            <strong>Creado:</strong>
+            <span th:text="${#temporals.format(ticket.createdAt, 'dd/MM/yyyy HH:mm')}">fecha</span>
+        </p>
+
+        <!-- Acciones TECH/ADMIN -->
+        <div th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}">
+            <hr>
+
+            <h3>Acciones</h3>
+
+            <!-- Cambiar estado -->
+            <p class="muted">Cambiar estado:</p>
+
+            <form th:action="@{/tickets/{id}/status(id=${ticket.id})}" method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="hidden" name="status" value="OPEN">
+                <button type="submit" th:disabled="${ticket.status.name() == 'OPEN'}">OPEN</button>
+            </form>
+
+            <form th:action="@{/tickets/{id}/status(id=${ticket.id})}" method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="hidden" name="status" value="IN_PROGRESS">
+                <button type="submit" th:disabled="${ticket.status.name() == 'IN_PROGRESS'}">IN_PROGRESS</button>
+            </form>
+
+            <form th:action="@{/tickets/{id}/status(id=${ticket.id})}" method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="hidden" name="status" value="CLOSED">
+                <button type="submit" th:disabled="${ticket.status.name() == 'CLOSED'}">CLOSED</button>
+            </form>
+
+            <br><br>
+
+            <!-- Asignarme -->
+            <form th:action="@{/tickets/{id}/assign-me(id=${ticket.id})}" method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" th:disabled="${ticket.assignedTo == #authentication.name}">
+                    Asignarme
+                </button>
+            </form>
+
+            <a th:href="@{/tickets/{id}/edit(id=${ticket.id})}" style="margin-left:12px;">Editar</a>
+
+            <!-- ✅ Archivar (solo si CLOSED) -->
+            <form th:action="@{/tickets/{id}/archive(id=${ticket.id})}"
+                  method="post"
+                  style="display:inline; margin-left:12px;"
+                  th:if="${ticket.status.name() == 'CLOSED'}"
+                  onsubmit="return confirm('¿Archivar este ticket? Ya no aparecerá en la lista de activos.');">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" style="background:linear-gradient(135deg,#64748b,#475569);">
+                    Archivar
+                </button>
+            </form>
+        </div>
+
+        <!-- Dropdown asignar a (SOLO ADMIN) -->
+        <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <hr>
+            <h3>Asignar a</h3>
+
+            <form th:action="@{/tickets/{id}/assign(id=${ticket.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                <select name="username">
+                    <option value="" th:selected="${ticket.assignedTo == null}">-- Sin asignar --</option>
+
+                    <option th:each="u : ${assignees}"
+                            th:value="${u}"
+                            th:text="${u}"
+                            th:selected="${u == ticket.assignedTo}">
+                    </option>
+                </select>
+
+                <button type="submit">Guardar</button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Comentarios -->
+    <h2>Comentarios</h2>
+
+    <div th:if="${#lists.isEmpty(comments)}" class="card">
+        <p class="muted">No hay comentarios todavía.</p>
+    </div>
+
+    <div th:each="c : ${comments}" class="card">
+        <strong th:text="${c.author}">autor</strong>
+        <span class="muted"> · </span>
+        <span class="muted" th:text="${#temporals.format(c.createdAt, 'dd/MM/yyyy HH:mm')}">fecha</span>
+
+        <p th:text="${c.content}">Texto comentario</p>
+    </div>
+
+    <!-- Añadir comentario -->
+    <div class="card">
+        <h3>Añadir comentario</h3>
+
+        <form th:action="@{/tickets/{id}/comments(id=${ticket.id})}"
+              th:object="${newComment}"
+              method="post">
+
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <textarea th:field="*{content}" rows="4" placeholder="Escribe tu comentario..."></textarea>
+
+            <div class="error"
+                 th:if="${#fields.hasErrors('content')}"
+                 th:errors="*{content}">
+            </div>
+
+            <button type="submit">Añadir comentario</button>
+        </form>
+    </div>
+
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

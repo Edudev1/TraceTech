@@ -1,0 +1,236 @@
+/* ===== RESET SUAVE ===== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #e4ecf5);
+    color: #1f2933;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 22px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    flex-wrap: nowrap;              /* ✅ clave: no partir navbar */
+}
+
+/* ✅ clave: que los links estén en la misma línea */
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: nowrap;              /* ✅ no salto de línea */
+    min-width: 0;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #334155;
+    font-weight: 500;
+    margin-right: 0;                /* ✅ quitamos el margin-right que empuja */
+    transition: color 0.2s ease, transform 0.15s ease;
+    white-space: nowrap;            /* ✅ “Mis asignados” no se parte */
+}
+
+.navbar a:hover {
+    color: #2563eb;
+    transform: translateY(-1px);
+}
+
+/* ===== LOGO NAVBAR / BRAND ===== */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;                 /* ✅ el logo/texto no se encogen raro */
+
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+    display: block;
+}
+
+.brand-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.user-pill {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #e0ecff;
+    color: #1e40af;
+    font-weight: 600;
+}
+
+/* ===== CONTENEDOR GENERAL ===== */
+.container {
+    flex: 1;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 18px;
+}
+
+/* ===== TARJETAS ===== */
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.08);
+}
+
+/* ===== FORMULARIOS ===== */
+input, textarea, select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ===== BOTONES ===== */
+button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+}
+
+button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Botón tipo link (logout) */
+.link-btn {
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.link-btn:hover {
+    text-decoration: underline;
+}
+
+/* ===== TÍTULOS ===== */
+h1, h2, h3 {
+    margin-top: 0;
+    color: #1e293b;
+}
+
+/* ===== MENSAJES ===== */
+.error {
+    color: #dc2626;
+    font-size: 0.9rem;
+}
+
+.ok {
+    color: #16a34a;
+    font-size: 0.9rem;
+}
+
+.muted {
+    color: #64748b;
+}
+
+/* ===== TABLAS ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+th, td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+th {
+    background: #f1f5f9;
+    font-weight: 600;
+}
+
+tr:hover {
+    background: #f8fafc;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    margin-top: 60px;
+    padding: 18px 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #64748b;
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.footer strong {
+    color: #334155;
+    font-weight: 600;
+}
+
+/* ===== ANIMACIÓN SUAVE AL CARGAR ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+

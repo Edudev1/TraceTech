@@ -1,0 +1,11 @@
+package com.tracetech.eah.tracetecheah.common.repository;
+
+import com.tracetech.eah.tracetecheah.common.entity.AppUser;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<AppUser, Long> {
+    Optional<AppUser> findByUsername(String username);
+}

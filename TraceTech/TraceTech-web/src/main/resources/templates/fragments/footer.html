@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<footer th:fragment="footer" class="footer">
+    <div class="footer-content">
+        © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2026</span>
+        · TraceTech · Desarrollado por <strong>Eduardo Angulo Hidalgo</strong>
+    </div>
+</footer>
+
+</body>
+</html>

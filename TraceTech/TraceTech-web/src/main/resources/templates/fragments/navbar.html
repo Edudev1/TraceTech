@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<nav th:fragment="navbar" class="navbar">
+    <div class="nav-left">
+        <a class="brand" th:href="@{/}">
+            <img th:src="@{/img/tracetech-logo.png}" alt="TraceTech" class="logo">
+            <span class="brand-text">TraceTech</span>
+        </a>
+
+        <a th:href="@{/tickets}">Tickets</a>
+        <a th:href="@{/tickets/new}">Nuevo</a>
+
+        <span th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}">
+      <a th:href="@{/tickets/mine}">Mis asignados</a>
+    </span>
+
+        <a th:href="@{/tickets/my-created}">Mis creados</a>
+
+        <span th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <a th:href="@{/admin/users}">Usuarios</a>
+    </span>
+    </div>
+
+    <div class="nav-right">
+    <span th:if="${#authorization.expression('isAnonymous()')}">
+      <a th:href="@{/login}">Login cliente</a>
+      <a th:href="@{/staff/login}">Login staff</a>
+      <a th:href="@{/register}">Crear cuenta</a>
+    </span>
+
+        <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <span class="user-pill">
+        <strong th:text="${#authentication.name}">user</strong>
+      </span>
+
+      <form th:action="@{/logout}" method="post" style="display:inline">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit" class="link-btn">Salir</button>
+      </form>
+    </span>
+    </div>
+</nav>
+
+
+</body>
+</html>

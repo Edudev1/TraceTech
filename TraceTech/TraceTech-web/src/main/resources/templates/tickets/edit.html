@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Ticket - TraceTech</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div class="container">
+
+    <h1>Editar Ticket</h1>
+
+    <div class="card">
+        <form th:action="@{/tickets/{id}/edit(id=${ticket.id})}" th:object="${ticket}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <label>Título</label>
+            <input type="text" th:field="*{title}">
+            <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+
+            <label>Descripción</label>
+            <textarea th:field="*{description}" rows="6"></textarea>
+            <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+
+            <!-- Solo staff debería tocar estado/prioridad -->
+            <div th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}">
+                <label>Prioridad</label>
+                <select th:field="*{priority}">
+                    <option th:each="p : ${priorities}" th:value="${p}" th:text="${p}"></option>
+                </select>
+
+                <label>Estado</label>
+                <select th:field="*{status}">
+                    <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+                </select>
+            </div>
+
+            <button type="submit">Guardar cambios</button>
+        </form>
+
+        <!-- Acciones rápidas -->
+        <div th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}" style="margin-top:16px;">
+            <hr style="margin:18px 0; border:none; border-top:1px solid #e2e8f0;">
+            <h3>Acciones</h3>
+
+            <!-- Cerrar ticket (no borra, cambia estado) -->
+            <form th:action="@{/tickets/{id}/status(id=${ticket.id})}" method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="hidden" name="status" value="CLOSED">
+                <button type="submit">Cerrar ticket</button>
+            </form>
+
+            <!-- Eliminar ticket (mejor solo ADMIN) -->
+            <span th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                <form th:action="@{/tickets/{id}/delete(id=${ticket.id})}" method="post" style="display:inline; margin-left:10px;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" style="background:linear-gradient(135deg,#ef4444,#dc2626);">
+                        Eliminar ticket
+                    </button>
+                </form>
+            </span>
+
+        </div>
+    </div>
+
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

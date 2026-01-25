@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - TraceTech</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div class="container" style="display:flex; justify-content:center; align-items:center; min-height:70vh;">
+
+    <div class="card" style="max-width:520px; width:100%;">
+
+        <h2 style="text-align:center;">Crear cuenta</h2>
+        <p class="muted" style="text-align:center;">Registro para clientes</p>
+
+        <form th:action="@{/register}" th:object="${user}" method="post" style="margin-top:15px;">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <label>Nombre</label>
+            <input type="text" th:field="*{firstName}" required>
+            <div class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+
+            <label>Apellidos</label>
+            <input type="text" th:field="*{lastName}" required>
+            <div class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+
+            <label>Teléfono</label>
+            <input type="text" th:field="*{phone}" required>
+            <div class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+
+            <label>Usuario</label>
+            <input type="text" th:field="*{username}" required>
+            <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+
+            <label>Contraseña</label>
+            <input type="password" th:field="*{password}" required>
+            <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+
+            <button type="submit" style="width:100%; margin-top:10px;">Crear cuenta</button>
+        </form>
+
+        <hr style="margin:18px 0; border:none; border-top:1px solid #e2e8f0;">
+
+        <div style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <a th:href="@{/login}">Ya tengo cuenta · Login cliente</a>
+            <a th:href="@{/}">Volver al inicio</a>
+        </div>
+
+    </div>
+
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

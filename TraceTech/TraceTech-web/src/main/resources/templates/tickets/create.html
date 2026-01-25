@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Ticket - TraceTech</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div class="container">
+
+    <h1>Nuevo Ticket</h1>
+
+    <div class="card">
+        <form th:action="@{/tickets}" th:object="${ticket}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <label>Título</label>
+            <input type="text" th:field="*{title}" placeholder="Ej: No me arranca el ordenador">
+            <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+
+            <label>Descripción</label>
+            <textarea th:field="*{description}" rows="6"
+                      placeholder="Describe el problema con el mayor detalle posible..."></textarea>
+            <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+
+
+            <button type="submit">Crear ticket</button>
+        </form>
+    </div>
+
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
