@@ -2,8 +2,8 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/css/app.css}">
     <title>Tickets - TraceTech</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 
@@ -21,7 +21,8 @@
                 <th>Título</th>
                 <th>Estado</th>
                 <th>Prioridad</th>
-                <th>Fecha de creación</th>
+                <th>Creado</th>
+                <th th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}">Acciones</th>
             </tr>
             </thead>
 
@@ -34,12 +35,28 @@
                 <td th:text="${t.status}">OPEN</td>
                 <td th:text="${t.priority}">MEDIUM</td>
                 <td th:text="${#temporals.format(t.createdAt, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+
+                <td th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}">
+                    <form th:action="@{/tickets/{id}/status(id=${t.id})}"
+                          method="post"
+                          style="display:inline"
+                          onsubmit="return confirm('¿Cerrar este ticket?');">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <input type="hidden" name="status" value="CLOSED" />
+                        <button type="submit"
+                                th:disabled="${t.status.name() == 'CLOSED'}"
+                                class="danger-btn">
+                            Cerrar
+                        </button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
 
 </div>
+
 <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

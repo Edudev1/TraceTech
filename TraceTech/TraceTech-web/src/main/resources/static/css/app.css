@@ -3,15 +3,19 @@
     box-sizing: border-box;
 }
 
-body {
-    margin: 0;
-    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    background: linear-gradient(135deg, #f5f7fa, #e4ecf5);
-    color: #1f2933;
+body{
+    margin:0;
+    font-family:"Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    color:#1f2933;
 
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    background:
+            radial-gradient(1200px 600px at 10% 10%, rgba(37,99,235,0.14), transparent 60%),
+            radial-gradient(900px 500px at 90% 30%, rgba(16,185,129,0.12), transparent 55%),
+            linear-gradient(135deg, #f5f7fa, #e6eef7);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
 }
 
 /* ===== NAVBAR ===== */
@@ -28,15 +32,14 @@ body {
     top: 0;
     z-index: 100;
 
-    flex-wrap: nowrap;              /* ✅ clave: no partir navbar */
+    flex-wrap: nowrap;
 }
 
-/* ✅ clave: que los links estén en la misma línea */
 .nav-left, .nav-right {
     display: flex;
     align-items: center;
     gap: 16px;
-    flex-wrap: nowrap;              /* ✅ no salto de línea */
+    flex-wrap: nowrap;
     min-width: 0;
 }
 
@@ -44,9 +47,9 @@ body {
     text-decoration: none;
     color: #334155;
     font-weight: 500;
-    margin-right: 0;                /* ✅ quitamos el margin-right que empuja */
+    margin-right: 0;
     transition: color 0.2s ease, transform 0.15s ease;
-    white-space: nowrap;            /* ✅ “Mis asignados” no se parte */
+    white-space: nowrap;
 }
 
 .navbar a:hover {
@@ -60,7 +63,7 @@ body {
     align-items: center;
     gap: 10px;
     white-space: nowrap;
-    flex-shrink: 0;                 /* ✅ el logo/texto no se encogen raro */
+    flex-shrink: 0;
 
     font-size: 1.2rem;
     font-weight: 700;
@@ -233,4 +236,78 @@ tr:hover {
     from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* ===== BOTÓN PELIGRO (cerrar/borrar) ===== */
+.danger-btn{
+    background: linear-gradient(135deg,#ef4444,#dc2626);
+}
+.danger-btn:hover{
+    box-shadow: 0 8px 18px rgba(239, 68, 68, 0.25);
+}
+
+/* ===== NAV RIGHT: user + logout ===== */
+.nav-user{
+    display:flex;
+    align-items:center;
+    gap:14px;               /* separa user y salir */
+}
+
+/* Logout bonito + hover rojo */
+.logout-form{ margin:0; }
+.logout-btn{
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #334155;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.logout-btn:hover{
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: #b91c1c;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(239, 68, 68, 0.18);
+}
+
+/* ===== Dropdown usuario sin JS ===== */
+.user-menu{ position: relative; }
+.user-menu summary{
+    list-style: none;
+    cursor: pointer;
+}
+.user-menu summary::-webkit-details-marker{ display:none; }
+
+.user-dropdown{
+    position:absolute;
+    right: 0;
+    top: 110%;
+    min-width: 180px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 14px 35px rgba(0,0,0,0.10);
+    padding: 8px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    z-index: 200;
+}
+
+.user-dropdown a{
+    padding: 10px 10px;
+    border-radius: 10px;
+    color: #334155;
+    font-weight: 600;
+    transform: none; /* evita saltito de hover */
+}
+
+.user-dropdown a:hover{
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
 

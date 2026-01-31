@@ -56,13 +56,10 @@ public class TicketController {
     @PostMapping
     public String create(@Valid @ModelAttribute("ticket") Ticket ticket,
                          BindingResult bindingResult,
-                         Model model, Principal principal) {
+                         Model model,
+                         java.security.Principal principal) {
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("statuses", TicketStatus.values());
-            model.addAttribute("priorities", Priority.values());
-            return "tickets/create";
-        }
+        if (bindingResult.hasErrors()) return "tickets/create";
 
         ticket.setCreatedBy(principal.getName());
         ticketService.save(ticket);
@@ -147,7 +144,7 @@ public class TicketController {
     @PreAuthorize("hasAnyRole('ADMIN','TECH')")
     @PostMapping("/{id}/edit")
     public String update(@PathVariable Long id,
-                         @Valid @ModelAttribute("ticket") Ticket ticket,
+                         @Valid @ModelAttribute("ticket") Ticket formTicket,
                          BindingResult bindingResult,
                          Model model) {
 
@@ -157,8 +154,17 @@ public class TicketController {
             return "tickets/edit";
         }
 
-        ticket.setId(id);
-        ticketService.save(ticket);
+        var opt = ticketService.findById(id);
+        if (opt.isEmpty()) return "redirect:/tickets";
+
+        Ticket dbTicket = opt.get();
+
+        dbTicket.setTitle(formTicket.getTitle());
+        dbTicket.setDescription(formTicket.getDescription());
+        dbTicket.setPriority(formTicket.getPriority());
+        dbTicket.setStatus(formTicket.getStatus());
+
+        ticketService.save(dbTicket);
 
         return "redirect:/tickets/" + id;
     }

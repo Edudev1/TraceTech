@@ -33,7 +33,7 @@
             <span th:text="${#temporals.format(ticket.createdAt, 'dd/MM/yyyy HH:mm')}">fecha</span>
         </p>
 
-        <!-- Acciones TECH/ADMIN -->
+        <!-- Acciones TECH/ADMIN = -->
         <div th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}">
             <hr>
 
@@ -72,7 +72,7 @@
 
             <a th:href="@{/tickets/{id}/edit(id=${ticket.id})}" style="margin-left:12px;">Editar</a>
 
-            <!-- ✅ Archivar (solo si CLOSED) -->
+            <!-- Archivar (solo si CLOSED) -->
             <form th:action="@{/tickets/{id}/archive(id=${ticket.id})}"
                   method="post"
                   style="display:inline; margin-left:12px;"

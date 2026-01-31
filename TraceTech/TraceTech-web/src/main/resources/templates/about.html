@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Sobre TraceTech</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div class="container">
+  <div class="card">
+    <h1>Sobre TraceTech</h1>
+    <p class="muted">TraceTech es un gestor de incidencias creado como proyecto académico, inspirado en flujos reales de soporte.</p>
+
+    <h3>Qué incluye</h3>
+    <ul>
+      <li>Tickets con estados (OPEN / IN_PROGRESS / CLOSED)</li>
+      <li>Asignación a técnicos</li>
+      <li>Comentarios por ticket</li>
+      <li>Roles (ADMIN, TECH, CLIENT)</li>
+    </ul>
+
+    <p class="muted">Objetivo: aplicar MVC, JPA, validación, seguridad y vistas con Thymeleaf.</p>
+  </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
