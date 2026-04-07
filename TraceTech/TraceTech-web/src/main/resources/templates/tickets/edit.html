@@ -4,12 +4,22 @@
     <meta charset="UTF-8">
     <title>Editar Ticket - TraceTech</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/img/tracetech-logo.ico}">
 </head>
 <body>
 
 <nav th:replace="fragments/navbar :: navbar"></nav>
 
 <div class="container">
+    <div class="breadcrumb">
+        <a th:href="@{/tickets}">Tickets</a>
+        <span class="breadcrumb-sep">/</span>
+        <a th:href="@{/tickets/{id}(id=${ticket.id})}" th:text="'Ticket #' + ${ticket.id}">Ticket</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Editar</span>
+    </div>
+
+    <div th:replace="fragments/flash :: flashMessages"></div>
 
     <h1>Editar Ticket</h1>
 

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Acceso denegado - TraceTech</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="icon" type="image/x-icon" th:href="@{/img/tracetech-logo.ico}">
+</head>
+<body>
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div class="container error-page">
+  <div class="error-card">
+    <p class="error-code">403</p>
+    <h1>Acceso denegado</h1>
+    <p class="muted">
+      No tienes permisos para acceder a esta página o realizar esta acción.
+    </p>
+
+    <div class="error-actions">
+      <a th:href="@{/}" class="ticket-action-link">Volver al inicio</a>
+      <a th:href="@{/tickets}" class="ticket-action-link">Ir a tickets</a>
+    </div>
+  </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

@@ -4,26 +4,67 @@
   <meta charset="UTF-8">
   <title>Sobre TraceTech</title>
   <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="icon" type="image/x-icon" th:href="@{/img/tracetech-logo.ico}">
 </head>
 <body>
 
 <nav th:replace="fragments/navbar :: navbar"></nav>
 
-<div class="container">
-  <div class="card">
-    <h1>Sobre TraceTech</h1>
-    <p class="muted">TraceTech es un gestor de incidencias creado como proyecto académico, inspirado en flujos reales de soporte.</p>
+<div class="container about-page">
+  <div class="breadcrumb">
+    <a th:href="@{/}">Inicio</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Sobre nosotros</span>
+  </div>
+  <div th:replace="fragments/flash :: flashMessages"></div>
 
-    <h3>Qué incluye</h3>
-    <ul>
-      <li>Tickets con estados (OPEN / IN_PROGRESS / CLOSED)</li>
-      <li>Asignación a técnicos</li>
-      <li>Comentarios por ticket</li>
-      <li>Roles (ADMIN, TECH, CLIENT)</li>
+  <section class="about-hero">
+    <p class="about-kicker">Sobre el proyecto</p>
+    <h1>TraceTech</h1>
+    <p class="about-lead">
+      TraceTech es un gestor de incidencias desarrollado como proyecto académico,
+      inspirado en flujos reales de soporte técnico y gestión de tickets.
+    </p>
+  </section>
+
+  <section class="about-content">
+    <h2>Qué es TraceTech</h2>
+    <p>
+      La aplicación está pensada para simular un entorno de soporte donde distintos usuarios
+      pueden crear, gestionar y seguir incidencias de forma organizada.
+    </p>
+    <p>
+      El proyecto ha servido para construir una aplicación web con una base sólida,
+      aplicando arquitectura MVC, persistencia, validación, seguridad y vistas dinámicas.
+    </p>
+
+    <h2>Qué incluye</h2>
+    <ul class="about-list">
+      <li>Gestión de tickets con estados <strong>OPEN</strong>, <strong>IN_PROGRESS</strong> y <strong>CLOSED</strong></li>
+      <li>Asignación de tickets a técnicos</li>
+      <li>Comentarios por incidencia</li>
+      <li>Control de acceso por roles: <strong>ADMIN</strong>, <strong>TECH</strong> y <strong>CLIENT</strong></li>
+      <li>Interfaz renderizada con Thymeleaf</li>
     </ul>
 
-    <p class="muted">Objetivo: aplicar MVC, JPA, validación, seguridad y vistas con Thymeleaf.</p>
-  </div>
+    <h2>Objetivo técnico</h2>
+    <p>
+      TraceTech nace con la idea de aplicar conceptos clave del desarrollo backend y full stack con Java:
+      patrón MVC, JPA, validación de formularios, Spring Security y composición de vistas reutilizables.
+    </p>
+  </section>
+
+  <section class="about-author-box">
+    <h2>Autor</h2>
+    <p><strong>Eduardo Angulo Hidalgo</strong></p>
+    <p class="muted">Desarrollador del proyecto TraceTech.</p>
+
+    <div class="author-links">
+      <a href="mailto:eduardoangulo.hidalgo@gmail.com">eduardoangulo.hidalgo@gmail.com</a>
+      <a href="https://github.com/edudev1" target="_blank" rel="noopener noreferrer">github.com/edudev1</a>
+    </div>
+  </section>
+
 </div>
 
 <div th:replace="fragments/footer :: footer"></div>

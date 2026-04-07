@@ -33,7 +33,6 @@ public class AuthController {
         return "auth/staff-login";
     }
 
-
     @GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("user", new AppUser());
@@ -44,6 +43,7 @@ public class AuthController {
     public String register(@Valid @ModelAttribute("user") AppUser user,
                            BindingResult bindingResult,
                            Model model) {
+        user.setUsername(user.getUsername().trim().toLowerCase());
 
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             bindingResult.rejectValue("username", "duplicate", "El usuario ya existe");

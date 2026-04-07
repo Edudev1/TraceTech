@@ -4,14 +4,66 @@
     <meta charset="UTF-8">
     <title>Tickets - TraceTech</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/img/tracetech-logo.ico}">
 </head>
 <body>
 
 <nav th:replace="fragments/navbar :: navbar"></nav>
 
-<div class="container">
+<div class="container ticket-page">
 
-    <h1>Listado de tickets</h1>
+    <div th:replace="fragments/flash :: flashMessages"></div>
+
+    <div class="list-header">
+        <div>
+            <h1>Listado de tickets</h1>
+            <p class="muted" th:text="${#lists.size(tickets)} + ' ticket(s)'">0 ticket(s)</p>
+        </div>
+
+        <a th:href="@{/tickets/new}" class="ticket-action-link">Nuevo ticket</a>
+    </div>
+
+    <div class="card ticket-filters-card">
+        <form th:action="${listBasePath}" method="get" class="ticket-filters-form">
+            <div class="ticket-filter-group">
+                <label for="q">Buscar</label>
+                <input id="q"
+                       type="text"
+                       name="q"
+                       th:value="${q}"
+                       placeholder="Buscar por título...">
+            </div>
+
+            <div class="ticket-filter-group">
+                <label for="status">Estado</label>
+                <select id="status" name="status">
+                    <option value="">Todos</option>
+                    <option th:each="s : ${statuses}"
+                            th:value="${s.name()}"
+                            th:text="${s.name() == 'OPEN' ? 'Abierto' : (s.name() == 'IN_PROGRESS' ? 'En progreso' : 'Cerrado')}"
+                            th:selected="${status != null and status.name() == s.name()}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="ticket-filter-group">
+                <label for="priority">Prioridad</label>
+                <select id="priority" name="priority">
+                    <option value="">Todas</option>
+                    <option th:each="p : ${priorities}"
+                            th:value="${p.name()}"
+                            th:text="${p.name() == 'LOW' ? 'Baja' : (p.name() == 'MEDIUM' ? 'Media' : 'Alta')}"
+                            th:selected="${priority != null and priority.name() == p.name()}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="ticket-filter-actions">
+                <button type="submit">Filtrar</button>
+                <a th:href="${listBasePath}" class="ticket-filter-reset">Limpiar</a>
+            </div>
+        </form>
+    </div>
 
     <div class="card">
         <table>
@@ -21,19 +73,56 @@
                 <th>Título</th>
                 <th>Estado</th>
                 <th>Prioridad</th>
+                <th>Asignado a</th>
+                <th th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}">Creado por</th>
                 <th>Creado</th>
                 <th th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}">Acciones</th>
             </tr>
             </thead>
 
             <tbody>
+            <tr th:if="${#lists.isEmpty(tickets)}">
+                <td th:colspan="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')} ? 8 : 6">
+                    <div class="empty-state-inline">
+                        <h3>No hay tickets</h3>
+                        <p class="muted">No se han encontrado tickets que coincidan con los filtros actuales.</p>
+                        <a th:href="${listBasePath}" class="ticket-filter-reset">Quitar filtros</a>
+                    </div>
+                </td>
+            </tr>
+
             <tr th:each="t : ${tickets}">
                 <td th:text="${t.id}">1</td>
+
                 <td>
-                    <a th:href="@{/tickets/{id}(id=${t.id})}" th:text="${t.title}">Título</a>
+                    <a th:href="@{/tickets/{id}(id=${t.id})}" class="ticket-title-link">
+                        <span th:text="${t.title}">Título</span>
+                    </a>
                 </td>
-                <td th:text="${t.status}">OPEN</td>
-                <td th:text="${t.priority}">MEDIUM</td>
+
+                <td>
+                    <span class="badge"
+                          th:classappend="${t.status.name() == 'OPEN'} ? ' badge-status-open' :
+                                          (${t.status.name() == 'IN_PROGRESS'} ? ' badge-status-progress' : ' badge-status-closed')"
+                          th:text="${t.status.name() == 'OPEN' ? 'Abierto' : (t.status.name() == 'IN_PROGRESS' ? 'En progreso' : 'Cerrado')}">
+                        Abierto
+                    </span>
+                </td>
+
+                <td>
+                    <span class="badge"
+                          th:classappend="${t.priority.name() == 'LOW'} ? ' badge-priority-low' :
+                                          (${t.priority.name() == 'MEDIUM'} ? ' badge-priority-medium' : ' badge-priority-high')"
+                          th:text="${t.priority.name() == 'LOW' ? 'Baja' : (t.priority.name() == 'MEDIUM' ? 'Media' : 'Alta')}">
+                        Media
+                    </span>
+                </td>
+
+                <td th:text="${t.assignedTo} ?: '-'">-</td>
+
+                <td th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}"
+                    th:text="${t.createdBy} ?: '-'">-</td>
+
                 <td th:text="${#temporals.format(t.createdAt, 'dd/MM/yyyy HH:mm')}">Fecha</td>
 
                 <td th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}">

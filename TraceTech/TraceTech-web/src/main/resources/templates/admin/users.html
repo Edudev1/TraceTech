@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <title>Usuarios - TraceTech</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/img/tracetech-logo.ico}">
 </head>
 <body>
 
 <nav th:replace="fragments/navbar :: navbar"></nav>
 
 <div class="container">
+    <div th:replace="fragments/flash :: flashMessages"></div>
     <h1>Usuarios</h1>
 
     <div class="card">
@@ -19,7 +21,7 @@
                 <th>ID</th>
                 <th>Username</th>
                 <th>Rol</th>
-                <th>Enabled</th>
+                <th>Habilitado</th>
                 <th>Acciones</th>
             </tr>
             </thead>

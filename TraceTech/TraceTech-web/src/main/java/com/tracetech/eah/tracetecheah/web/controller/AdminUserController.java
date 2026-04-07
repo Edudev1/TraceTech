@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/users")
@@ -19,13 +20,15 @@ public class AdminUserController {
 
     @GetMapping
     public String list(Model model) {
+        model.addAttribute("section", "users");
         model.addAttribute("users", userRepository.findAll());
         return "admin/users";
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id) {
+    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         userRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Usuario eliminado correctamente.");
         return "redirect:/admin/users";
     }
 }

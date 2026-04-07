@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="flashMessages">
+  <div class="toast-container"
+       th:if="${successMessage != null or errorMessage != null or infoMessage != null}">
+
+    <div th:if="${successMessage != null}" class="toast toast-success js-toast">
+      <button type="button" class="toast-close" aria-label="Cerrar">×</button>
+      <div class="toast-body">
+        <div class="toast-title">Éxito</div>
+        <div class="toast-message" th:text="${successMessage}">Operación realizada correctamente.</div>
+      </div>
+      <div class="toast-progress"></div>
+    </div>
+
+    <div th:if="${errorMessage != null}" class="toast toast-error js-toast">
+      <button type="button" class="toast-close" aria-label="Cerrar">×</button>
+      <div class="toast-body">
+        <div class="toast-title">Error</div>
+        <div class="toast-message" th:text="${errorMessage}">Ha ocurrido un error.</div>
+      </div>
+      <div class="toast-progress"></div>
+    </div>
+
+    <div th:if="${infoMessage != null}" class="toast toast-info js-toast">
+      <button type="button" class="toast-close" aria-label="Cerrar">×</button>
+      <div class="toast-body">
+        <div class="toast-title">Información</div>
+        <div class="toast-message" th:text="${infoMessage}">Información.</div>
+      </div>
+      <div class="toast-progress"></div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const toasts = document.querySelectorAll(".js-toast");
+
+      toasts.forEach((toast) => {
+        const closeBtn = toast.querySelector(".toast-close");
+        const duration = 4500;
+
+        const removeToast = () => {
+          toast.classList.add("toast-hide");
+          setTimeout(() => toast.remove(), 220);
+        };
+
+        if (closeBtn) {
+          closeBtn.addEventListener("click", removeToast);
+        }
+
+        setTimeout(removeToast, duration);
+      });
+    });
+  </script>
+</div>
+
+</body>
+</html>

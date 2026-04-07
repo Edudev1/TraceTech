@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Registro - TraceTech</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/img/tracetech-logo.ico}">
 </head>
 <body>
 
@@ -44,9 +45,9 @@
 
         <hr style="margin:18px 0; border:none; border-top:1px solid #e2e8f0;">
 
-        <div style="text-align:center; display:flex; flex-direction:column; gap:8px;">
-            <a th:href="@{/login}">Ya tengo cuenta · Login cliente</a>
-            <a th:href="@{/}">Volver al inicio</a>
+        <div class="auth-links auth-links-center">
+            <a th:href="@{/login}" class="auth-link auth-link-strong">Ya tengo cuenta, iniciar sesión</a>
+            <a th:href="@{/}" class="auth-link auth-link-muted">Volver al inicio</a>
         </div>
 
     </div>

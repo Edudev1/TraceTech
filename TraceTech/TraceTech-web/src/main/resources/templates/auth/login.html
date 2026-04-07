@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Login Cliente - TraceTech</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/img/tracetech-logo.ico}">
 </head>
 <body>
 
@@ -16,37 +17,40 @@
         <h2>Acceso clientes</h2>
         <p class="muted">Introduce tu usuario y contraseña</p>
 
+        <div class="flash-stack" th:if="${param.error != null or param.logout != null}">
+            <div th:if="${param.error != null}" class="flash flash-error">
+                Usuario o contraseña incorrectos.
+            </div>
+
+            <div th:if="${param.logout != null}" class="flash flash-success">
+                Sesión cerrada correctamente.
+            </div>
+        </div>
+
         <form th:action="@{/login}" method="post" style="margin-top:15px; text-align:left;">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
             <label>Usuario</label>
-            <input type="text" name="username" required>
+            <input type="text" name="username" placeholder="usuario123" required>
 
             <label>Contraseña</label>
-            <input type="password" name="password" required>
+            <input type="password" name="password" placeholder="········" required>
 
             <button type="submit" style="width:100%; margin-top:10px;">Entrar</button>
-
-            <p th:if="${param.error}" class="error" style="margin-top:10px;">
-                Usuario o contraseña incorrectos
-            </p>
-
-            <p th:if="${param.logout}" class="ok" style="margin-top:10px;">
-                Sesión cerrada correctamente
-            </p>
         </form>
 
         <hr style="margin:18px 0; border:none; border-top:1px solid #e2e8f0;">
 
-        <div style="display:flex; flex-direction:column; gap:8px;">
-            <a th:href="@{/register}">Crear cuenta</a>
-            <a th:href="@{/staff/login}">Acceso staff</a>
-            <a th:href="@{/}">Volver al inicio</a>
+        <div class="auth-links">
+            <a th:href="@{/register}" class="auth-link auth-link-strong">Crear cuenta</a>
+            <a th:href="@{/staff/login}" class="auth-link">Acceso staff</a>
+            <a th:href="@{/}" class="auth-link auth-link-muted">Volver al inicio</a>
         </div>
 
     </div>
 
 </div>
+
 <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

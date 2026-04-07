@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi perfil - TraceTech</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="icon" type="image/x-icon" th:href="@{/img/tracetech-logo.ico}">
+</head>
+<body>
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div class="container account-page">
+  <div class="breadcrumb">
+    <a th:href="@{/}">Inicio</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Mi perfil</span>
+  </div>
+  <div th:replace="fragments/flash :: flashMessages"></div>
+
+  <section class="account-hero">
+    <p class="account-kicker">Cuenta</p>
+    <h1>Mi perfil</h1>
+    <p class="muted">
+      Consulta la información de tu cuenta y accede rápidamente a las opciones más habituales.
+    </p>
+  </section>
+
+  <div class="account-grid">
+
+    <section class="account-card">
+      <h2>Información personal</h2>
+
+      <div class="account-info-grid">
+        <div class="account-info-item">
+          <span class="account-label">Nombre</span>
+          <span th:text="${user.firstName}">Nombre</span>
+        </div>
+
+        <div class="account-info-item">
+          <span class="account-label">Apellidos</span>
+          <span th:text="${user.lastName}">Apellidos</span>
+        </div>
+
+        <div class="account-info-item">
+          <span class="account-label">Usuario</span>
+          <span th:text="${user.username}">usuario</span>
+        </div>
+
+        <div class="account-info-item">
+          <span class="account-label">Teléfono</span>
+          <span th:text="${user.phone}">600000000</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="account-card">
+      <h2>Cuenta y acceso</h2>
+
+      <div class="account-info-grid">
+        <div class="account-info-item">
+          <span class="account-label">Rol</span>
+          <span th:text="${user.role}">CLIENT</span>
+        </div>
+
+        <div class="account-info-item">
+          <span class="account-label">Estado</span>
+          <span th:text="${user.enabled ? 'Activa' : 'Deshabilitada'}">Activa</span>
+        </div>
+
+        <div class="account-info-item">
+          <span class="account-label">ID usuario</span>
+          <span th:text="${user.id}">1</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="account-card account-card-full">
+      <h2>Acciones rápidas</h2>
+
+      <div class="account-actions">
+        <a th:href="@{/account/password}" class="account-action-link">
+          Cambiar contraseña
+        </a>
+
+        <a th:href="@{/tickets/my-created}" class="account-action-link">
+          Mis tickets creados
+        </a>
+
+        <a th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}"
+           th:href="@{/tickets/mine}"
+           class="account-action-link">
+          Mis tickets asignados
+        </a>
+
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+           th:href="@{/admin/users}"
+           class="account-action-link">
+          Gestionar usuarios
+        </a>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
