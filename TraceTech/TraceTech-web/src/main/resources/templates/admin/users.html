@@ -10,40 +10,104 @@
 
 <nav th:replace="fragments/navbar :: navbar"></nav>
 
-<div class="container">
-    <div th:replace="fragments/flash :: flashMessages"></div>
-    <h1>Usuarios</h1>
+<div class="container admin-users-page">
 
-    <div class="card">
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Rol</th>
-                <th>Habilitado</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="u : ${users}">
-                <td th:text="${u.id}"></td>
-                <td th:text="${u.username}"></td>
-                <td th:text="${u.role}"></td>
-                <td th:text="${u.enabled}"></td>
-                <td>
-                    <form th:action="@{/admin/users/{id}/delete(id=${u.id})}" method="post">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" style="background:linear-gradient(135deg,#ef4444,#dc2626);">
-                            Eliminar
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div th:replace="fragments/flash :: flashMessages"></div>
+
+    <div class="breadcrumb">
+        <a th:href="@{/}">Inicio</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Usuarios</span>
     </div>
+
+    <div class="admin-users-header">
+        <div>
+            <p class="ticket-kicker">Administración</p>
+            <h1>Usuarios</h1>
+            <p class="muted">
+                Gestiona las cuentas registradas en TraceTech.
+            </p>
+        </div>
+
+        <div class="admin-users-count">
+            <span>Total usuarios</span>
+            <strong th:text="${#lists.size(users)}">0</strong>
+        </div>
+    </div>
+
+    <div class="card admin-users-card">
+        <div th:if="${#lists.isEmpty(users)}" class="empty-state-inline">
+            <h3>No hay usuarios registrados</h3>
+            <p class="muted">Cuando se registren usuarios, aparecerán en esta tabla.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(users)}" class="table-responsive">
+            <table class="admin-users-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="u : ${users}">
+                    <td th:text="${u.id}">1</td>
+
+                    <td>
+                        <strong class="admin-username" th:text="${u.username}">username</strong>
+                    </td>
+
+                    <td>
+                        <span th:text="${u.firstName + ' ' + u.lastName}">Nombre Apellidos</span>
+                    </td>
+
+                    <td>
+                        <span th:text="${u.phone}">000000000</span>
+                    </td>
+
+                    <td>
+                        <span class="user-role-badge"
+                              th:classappend="${u.role.name() == 'ADMIN'} ? ' user-role-admin' :
+                                              (${u.role.name() == 'TECH'} ? ' user-role-tech' : ' user-role-client')"
+                              th:text="${u.role.name() == 'ADMIN' ? 'Administrador' :
+                                       (u.role.name() == 'TECH' ? 'Técnico' : 'Cliente')}">
+                            Cliente
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="user-status-badge"
+                              th:classappend="${u.enabled} ? ' user-status-active' : ' user-status-disabled'"
+                              th:text="${u.enabled} ? 'Activo' : 'Deshabilitado'">
+                            Activo
+                        </span>
+                    </td>
+
+                    <td>
+                        <form th:action="@{/admin/users/{id}/delete(id=${u.id})}"
+                              method="post"
+                              class="admin-user-action-form"
+                              onsubmit="return confirm('¿Eliminar este usuario? Esta acción no se puede deshacer.');">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="danger-btn admin-delete-user-btn">
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
+
 <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

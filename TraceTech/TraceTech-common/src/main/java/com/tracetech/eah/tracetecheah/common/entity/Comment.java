@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "comments")
@@ -30,4 +32,8 @@ public class Comment {
 
     @Column(length = 50)
     private String author;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("uploadedAt ASC")
+    private List<CommentAttachment> attachments = new ArrayList<>();
 }

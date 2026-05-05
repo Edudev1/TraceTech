@@ -10,7 +10,8 @@
 
 <nav th:replace="fragments/navbar :: navbar"></nav>
 
-<div class="container">
+<div class="container ticket-create-page">
+
     <div class="breadcrumb">
         <a th:href="@{/tickets}">Tickets</a>
         <span class="breadcrumb-sep">/</span>
@@ -19,27 +20,93 @@
 
     <div th:replace="fragments/flash :: flashMessages"></div>
 
-    <h1>Nuevo Ticket</h1>
+    <div class="create-topbar">
+        <div>
+            <p class="ticket-kicker">Nueva incidencia</p>
+            <h1>Crear nuevo ticket</h1>
+            <p class="muted">
+                Describe el problema para que el equipo técnico pueda revisarlo y ayudarte lo antes posible.
+            </p>
+        </div>
 
-    <div class="card">
-        <form th:action="@{/tickets}" th:object="${ticket}" method="post">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <a th:href="@{/tickets}" class="ticket-back-link">
+            ← Volver a tickets
+        </a>
+    </div>
 
-            <label>Título</label>
-            <input type="text" th:field="*{title}" placeholder="Ej: No me arranca el ordenador">
-            <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+    <div class="ticket-create-layout">
 
-            <label>Descripción</label>
-            <textarea th:field="*{description}" rows="6"
-                      placeholder="Describe el problema con el mayor detalle posible..."></textarea>
-            <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+        <!-- FORMULARIO PRINCIPAL -->
+        <main class="create-main-card">
+            <form th:action="@{/tickets}"
+                  th:object="${ticket}"
+                  method="post"
+                  class="create-ticket-form">
 
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-            <button type="submit">Crear ticket</button>
-        </form>
+                <div class="create-form-group">
+                    <label for="title">Título</label>
+                    <input id="title"
+                           type="text"
+                           th:field="*{title}"
+                           placeholder="Ej: No me arranca el ordenador">
+                    <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                    <p class="field-help">Usa una frase corta y clara para resumir el problema.</p>
+                </div>
+
+                <div class="create-form-group">
+                    <label for="description">Descripción</label>
+                    <textarea id="description"
+                              th:field="*{description}"
+                              rows="9"
+                              placeholder="Describe qué ocurre, desde cuándo pasa, qué has probado y cualquier mensaje de error..."></textarea>
+                    <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                    <p class="field-help">Cuanto más contexto añadas, más fácil será resolver la incidencia.</p>
+                </div>
+
+                <div class="create-form-actions">
+                    <button type="submit">Crear ticket</button>
+                    <a th:href="@{/tickets}" class="form-cancel-btn">Cancelar</a>
+                </div>
+            </form>
+        </main>
+
+        <!-- PANEL LATERAL -->
+        <aside class="create-side-panel">
+            <section class="create-help-card">
+                <h2>Consejos</h2>
+
+                <ul class="create-help-list">
+                    <li>Indica qué estabas intentando hacer.</li>
+                    <li>Incluye el mensaje de error si aparece.</li>
+                    <li>Explica cuándo empezó el problema.</li>
+                    <li>Añade pasos para reproducirlo si puedes.</li>
+                </ul>
+            </section>
+
+            <section class="create-help-card">
+                <h2>Ejemplo útil</h2>
+
+                <p class="muted">
+                    “Al iniciar sesión aparece un error 500 desde esta mañana.
+                    He probado en Chrome y Edge, y ocurre con mi usuario habitual.”
+                </p>
+            </section>
+
+            <section class="create-help-card create-next-card">
+                <h2>Después de crearlo</h2>
+
+                <p class="muted">
+                    Podrás añadir comentarios e imágenes desde el detalle del ticket.
+                </p>
+            </section>
+        </aside>
+
     </div>
 
 </div>
+
 <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

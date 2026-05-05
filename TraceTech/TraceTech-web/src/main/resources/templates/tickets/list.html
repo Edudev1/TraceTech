@@ -17,14 +17,30 @@
     <div class="list-header">
         <div>
             <h1>Listado de tickets</h1>
-            <p class="muted" th:text="${#lists.size(tickets)} + ' ticket(s)'">0 ticket(s)</p>
+            <p class="muted" th:text="'Mostrando ' + ${showingFrom} + '-' + ${showingTo} + ' de ' + ${totalItems} + ' ticket(s)'">
+                Mostrando 0-0 de 0 ticket(s)
+            </p>
         </div>
+        <div class="list-header-actions">
+            <a th:href="@{${csvExportPath}(q=${q}, status=${status}, priority=${priority})}"
+               class="export-btn">
+                Exportar CSV
+            </a>
 
-        <a th:href="@{/tickets/new}" class="ticket-action-link">Nuevo ticket</a>
+            <a th:href="@{${excelExportPath}(q=${q}, status=${status}, priority=${priority})}"
+               class="export-btn">
+                Exportar Excel
+            </a>
+
+            <a th:href="@{/tickets/new}" class="ticket-action-link">
+                Nuevo ticket
+            </a>
+        </div>
     </div>
 
     <div class="card ticket-filters-card">
         <form th:action="${listBasePath}" method="get" class="ticket-filters-form">
+            <input type="hidden" name="size" th:value="${pageSize}">
             <div class="ticket-filter-group">
                 <label for="q">Buscar</label>
                 <input id="q"
@@ -142,6 +158,26 @@
             </tr>
             </tbody>
         </table>
+        <div class="pagination"
+             th:if="${totalItems > 0 and totalPages > 1}">
+
+            <a class="pagination-link"
+               th:classappend="${!hasPreviousPage} ? ' pagination-disabled'"
+               th:href="${hasPreviousPage} ? @{${listBasePath}(page=${currentPage - 1}, size=${pageSize}, q=${q}, status=${status}, priority=${priority})} : '#'">
+                ← Anterior
+            </a>
+
+            <span class="pagination-info"
+                  th:text="'Página ' + ${currentPage + 1} + ' de ' + ${totalPages}">
+        Página 1 de 1
+    </span>
+
+            <a class="pagination-link"
+               th:classappend="${!hasNextPage} ? ' pagination-disabled'"
+               th:href="${hasNextPage} ? @{${listBasePath}(page=${currentPage + 1}, size=${pageSize}, q=${q}, status=${status}, priority=${priority})} : '#'">
+                Siguiente →
+            </a>
+        </div>
     </div>
 
 </div>

@@ -10,66 +10,131 @@
 
 <nav th:replace="fragments/navbar :: navbar"></nav>
 
-<div class="container" style="display:flex; justify-content:center; align-items:center; min-height:70vh;">
+<div class="container dashboard-page">
 
-    <div class="card" style="text-align:center; max-width:600px; width:100%;">
+    <div th:replace="fragments/flash :: flashMessages"></div>
 
-        <h1 style="font-size:2rem; margin-bottom:10px;">TraceTech</h1>
-        <p class="muted" style="margin-bottom:20px;">
-            Plataforma de gestión de incidencias para clientes y equipo técnico.
+    <!-- HOME PÚBLICA -->
+    <section th:if="${dashboardEnabled == null}" class="home-hero">
+        <p class="home-kicker">Gestión de incidencias</p>
+        <h1>TraceTech</h1>
+        <p class="home-lead">
+            Plataforma para crear, gestionar y resolver incidencias de forma organizada,
+            con roles de cliente, técnico y administrador.
         </p>
 
-        <!-- Usuario NO logueado -->
-        <div th:if="${#authorization.expression('isAnonymous()')}" style="display:flex; flex-direction:column; gap:12px;">
-
-            <a th:href="@{/login}">
-                <button style="width:100%;">Entrar como cliente</button>
-            </a>
-
-            <a th:href="@{/register}">
-                <button style="width:100%; background:linear-gradient(135deg,#16a34a,#15803d);">
-                    Crear cuenta
-                </button>
-            </a>
-
-            <div class="muted" style="margin-top:8px;">¿Eres parte del equipo?</div>
-
-            <a th:href="@{/staff/login}">
-                <button style="width:100%; background:linear-gradient(135deg,#475569,#334155);">
-                    Acceso staff
-                </button>
-            </a>
+        <div class="home-actions">
+            <a th:href="@{/login}" class="nav-btn nav-btn-primary">Login cliente</a>
+            <a th:href="@{/staff/login}" class="nav-btn nav-btn-secondary">Login staff</a>
+            <a th:href="@{/register}" class="nav-btn nav-btn-accent">Crear cuenta</a>
         </div>
+    </section>
 
-        <!-- Usuario logueado -->
-        <div th:if="${#authorization.expression('isAuthenticated()')}" style="margin-top:10px;">
+    <!-- DASHBOARD AUTENTICADO -->
+    <section th:if="${dashboardEnabled != null}" class="dashboard">
 
-            <p>Bienvenido, <strong th:text="${#authentication.name}">usuario</strong></p>
+        <div class="dashboard-header">
+            <div>
+                <p class="dashboard-kicker">Panel de control</p>
+                <h1 th:text="'Hola, ' + ${username}">Hola</h1>
 
-            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:15px;">
-                <a th:href="@{/tickets}">
-                    <button>Ver tickets</button>
-                </a>
+                <p class="muted" th:if="${isClient}">
+                    Resumen de tus tickets creados.
+                </p>
 
-                <a th:href="@{/tickets/new}">
-                    <button style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">
-                        Crear ticket
-                    </button>
-                </a>
+                <p class="muted" th:if="${isTech}">
+                    Resumen de los tickets que tienes asignados.
+                </p>
 
-                <span th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''TECH'')')}">
-                    <a th:href="@{/tickets/mine}">
-                        <button style="background:linear-gradient(135deg,#f59e0b,#d97706);">
-                            Mis asignados
-                        </button>
-                    </a>
-                </span>
+                <p class="muted" th:if="${isAdmin}">
+                    Resumen general del sistema.
+                </p>
+            </div>
+
+            <div class="dashboard-actions">
+                <a th:href="@{/tickets/new}" class="ticket-action-link">Nuevo ticket</a>
+                <a th:href="@{/tickets}" class="export-btn">Ver tickets</a>
             </div>
         </div>
 
-    </div>
+        <div class="dashboard-stats">
+            <a th:href="@{/tickets}" class="dashboard-stat">
+                <span class="dashboard-stat-label">Total</span>
+                <strong th:text="${totalCount}">0</strong>
+            </a>
+
+            <a th:href="@{/tickets(status='OPEN')}" class="dashboard-stat">
+                <span class="dashboard-stat-label">Abiertos</span>
+                <strong th:text="${openCount}">0</strong>
+            </a>
+
+            <a th:href="@{/tickets(status='IN_PROGRESS')}" class="dashboard-stat">
+                <span class="dashboard-stat-label">En progreso</span>
+                <strong th:text="${progressCount}">0</strong>
+            </a>
+
+            <a th:href="@{/tickets(status='CLOSED')}" class="dashboard-stat">
+                <span class="dashboard-stat-label">Cerrados</span>
+                <strong th:text="${closedCount}">0</strong>
+            </a>
+
+            <a th:if="${isAdmin}"
+               th:href="@{/admin/users}"
+               class="dashboard-stat">
+                <span class="dashboard-stat-label">Usuarios</span>
+                <strong th:text="${userCount}">0</strong>
+            </a>
+        </div>
+
+        <section class="dashboard-section">
+            <div class="dashboard-section-header">
+                <h2>Últimos tickets</h2>
+
+                <a th:if="${isTech}" th:href="@{/tickets/mine}" class="auth-link">Ver mis asignados</a>
+                <a th:if="${isClient}" th:href="@{/tickets/my-created}" class="auth-link">Ver mis creados</a>
+                <a th:if="${isAdmin}" th:href="@{/tickets}" class="auth-link">Ver todos</a>
+            </div>
+
+            <div th:if="${#lists.isEmpty(tickets)}" class="dashboard-empty">
+                <p class="muted">No hay tickets para mostrar todavía.</p>
+                <a th:href="@{/tickets/new}" class="ticket-action-link">Crear primer ticket</a>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(tickets)}" class="dashboard-ticket-list">
+                <a th:each="t : ${tickets}"
+                   th:href="@{/tickets/{id}(id=${t.id})}"
+                   class="dashboard-ticket-item">
+
+                    <div>
+                        <strong th:text="${t.title}">Título ticket</strong>
+                        <p class="muted" th:text="'#' + ${t.id} + ' · ' + ${#temporals.format(t.createdAt, 'dd/MM/yyyy HH:mm')}">
+                            #1 · fecha
+                        </p>
+                    </div>
+
+                    <div class="dashboard-ticket-badges">
+                        <span class="badge"
+                              th:classappend="${t.status.name() == 'OPEN'} ? ' badge-status-open' :
+                                              (${t.status.name() == 'IN_PROGRESS'} ? ' badge-status-progress' : ' badge-status-closed')"
+                              th:text="${t.status.name() == 'OPEN' ? 'Abierto' : (t.status.name() == 'IN_PROGRESS' ? 'En progreso' : 'Cerrado')}">
+                            Abierto
+                        </span>
+
+                        <span class="badge"
+                              th:classappend="${t.priority.name() == 'LOW'} ? ' badge-priority-low' :
+                                              (${t.priority.name() == 'MEDIUM'} ? ' badge-priority-medium' : ' badge-priority-high')"
+                              th:text="${t.priority.name() == 'LOW' ? 'Baja' : (t.priority.name() == 'MEDIUM' ? 'Media' : 'Alta')}">
+                            Media
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+    </section>
 
 </div>
+
 <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>
